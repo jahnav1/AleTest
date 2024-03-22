@@ -1,0 +1,24 @@
+﻿trigger:
+  branches:
+    include:
+    - PROD
+    - Prod
+stages:
+- stage: __default
+  jobs:
+  - job: Job
+    pool:
+      name: RPA-Prod
+    steps:
+    - task: UiPathPack@4
+      inputs:
+        versionType: 'CurrentVersion'
+        projectJsonPath: '$(Build.SourcesDirectory)'
+        orchestratorConnection: 'PROD Orchestrator Cloud'
+        outputPath: '$(Build.ArtifactStagingDirectory)\Output'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+

@@ -1,0 +1,456 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="CreateIncident" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mg="clr-namespace:Microsoft.Graph;assembly=Microsoft.Graph" xmlns:o="clr-namespace:OMERS_NonLegacy_ServiceNowAPI_Activities;assembly=OMERS.NonLegacy.ServiceNowAPI_Activities" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:ss="clr-namespace:System.Security;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uma="clr-namespace:UiPath.MicrosoftOffice365.Activities;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:umam="clr-namespace:UiPath.MicrosoftOffice365.Activities.Mail;assembly=UiPath.MicrosoftOffice365.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_str_Description" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ShortDescription" Type="InArgument(x:String)" />
+    <x:Property Name="in_str_ScreenShotURL" Type="InArgument(x:String)" />
+    <x:Property Name="in_str_ServiceNowCredentialsAssetName" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_GetAccessTokenEndPoint" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_ClientIDAssetName" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_GrantType" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_CreateTicketEndPoint" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_AssingmentGroup" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_CallerId" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_ServiceOffering" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_SubCategory" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_Impact" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_Urgency" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_MailBotCredentialAssetName" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_SuccessStatusCodes" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ErrorMailAccount" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ErrorMailTo" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ErrorMailSubject" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_GraphAPIApplicationIDAssetName" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_GraphAPITenantAssetName" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_str_ServiceNow_SExceptionMessage" Type="InArgument(x:String)" />
+    <x:Property Name="in_str_SExceptionBody" Type="InArgument(x:String)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>728,2407.3333333333335</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>CreateIncident_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="41">
+      <x:String>Microsoft.Graph</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>Newtonsoft.Json</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>OMERS_ServiceNowAPI_Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Collections.Specialized</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.Dynamic</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Activities.Mail</x:String>
+      <x:String>UiPath.MicrosoftOffice365.Enums</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Web</x:String>
+      <x:String>UiPath.Web.Activities</x:String>
+      <x:String>OMERS_NonLegacy_ServiceNowAPI_Activities</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="84">
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph</AssemblyReference>
+      <AssemblyReference>Microsoft.Graph.Core</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>NPOI</AssemblyReference>
+      <AssemblyReference>OMERS.ServiceNowAPI_Activities</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Linq.Async</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Net.Primitives</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Runtime.InteropServices</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.MicrosoftOffice365.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.Web</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>OMERS.NonLegacy.ServiceNowAPI_Activities</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="CreateIncident" sap:VirtualizedContainerService.HintSize="658.6666666666666,2342.6666666666665" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message - Create Incident Start." sap:VirtualizedContainerService.HintSize="596.6666666666666,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Create Incident - Workflow Started&quot;]" />
+    <TryCatch DisplayName="Try Catch - Create Incident Ticket in Service Now" sap:VirtualizedContainerService.HintSize="596.6666666666666,1914.6666666666667" sap2010:WorkflowViewState.IdRef="TryCatch_2">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <TryCatch.Try>
+        <Sequence DisplayName="Create Incident Ticket in Service Now" sap:VirtualizedContainerService.HintSize="558,1674.6666666666667" sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:Int32" Name="int_StatusCode" />
+            <Variable x:TypeArguments="x:String" Name="str_Result" />
+            <Variable x:TypeArguments="x:String" Name="str_AccessToken" />
+            <Variable x:TypeArguments="x:String" Name="str_password" />
+            <Variable x:TypeArguments="x:String" Name="str_IncidentNumber" />
+            <Variable x:TypeArguments="x:String" Name="str_username" />
+            <Variable x:TypeArguments="ss:SecureString" Name="secstr_password" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <Sequence DisplayName="Service Now Authentication" sap:VirtualizedContainerService.HintSize="496,969.3333333333334" sap2010:WorkflowViewState.IdRef="Sequence_5">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="x:String" Name="str_ClientId" />
+              <Variable x:TypeArguments="ss:SecureString" Name="secstr_ClientSecret" />
+              <Variable x:TypeArguments="x:String" Name="str_ClientSecret" />
+            </Sequence.Variables>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="[in_str_ServiceNowCredentialsAssetName]" CacheStrategy="None" DisplayName="Get Credential - Service now credentials" sap:VirtualizedContainerService.HintSize="434,144.66666666666666" sap2010:WorkflowViewState.IdRef="GetRobotCredential_1" Password="[secstr_password]" Username="[str_username]" />
+            <Assign DisplayName="Assign - str password" sap:VirtualizedContainerService.HintSize="434,85.33333333333333" sap2010:WorkflowViewState.IdRef="Assign_1">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[str_password]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[new System.Net.NetworkCredential(string.Empty, secstr_password).Password]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="[in_str_ServiceNow_ClientIDAssetName]" CacheStrategy="None" DisplayName="Get Credential" sap:VirtualizedContainerService.HintSize="434,144.66666666666666" sap2010:WorkflowViewState.IdRef="GetRobotCredential_5" Password="[secstr_ClientSecret]" Username="[str_ClientID]" />
+            <Assign DisplayName="Assign - str client secret" sap:VirtualizedContainerService.HintSize="434,85.33333333333333" sap2010:WorkflowViewState.IdRef="Assign_6">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[str_ClientSecret]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[new System.Net.NetworkCredential(string.Empty, secstr_ClientSecret).Password]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <o:GetAccessToken in_Int_Timeout="{x:Null}" sap:VirtualizedContainerService.HintSize="434,54" sap2010:WorkflowViewState.IdRef="GetAccessToken_2" in_Str_APIEndPoint="[in_str_ServiceNow_GetAccessTokenEndPoint]" in_Str_ClientID="[str_ClientId]" in_Str_ClientSecret="[str_ClientSecret]" in_Str_GrantType="[in_str_ServiceNow_GrantType]" in_Str_Pasword="[str_password]" in_Str_UserName="[str_username]" out_Str_AccessToken="[str_AccessToken]">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </o:GetAccessToken>
+            <ui:LogMessage DisplayName="Log Message Access Token" sap:VirtualizedContainerService.HintSize="434,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[&quot;Access Token Retrieved.&quot;]" />
+          </Sequence>
+          <o:CreateIncident in_Int_Timeout="{x:Null}" sap:VirtualizedContainerService.HintSize="496,54" sap2010:WorkflowViewState.IdRef="CreateIncident_3" in_Str_APIEndPoint="[in_str_ServiceNow_CreateTicketEndPoint]" in_Str_AccesToken="[str_AccessToken]" in_Str_Assignment_Group="[in_str_ServiceNow_AssingmentGroup]" in_Str_CallerID="[in_str_ServiceNow_CallerId]" in_Str_Description="[in_str_Description]" in_Str_Impact="[in_str_ServiceNow_Impact]" in_Str_ScreenShot_URL="[in_str_ScreenShotURL]" in_Str_Service_Offering="[in_str_ServiceNow_ServiceOffering]" in_Str_Short_Description="[in_str_ShortDescription]" in_Str_SubCategory="[in_str_ServiceNow_SubCategory]" in_Str_Urgency="[in_str_ServiceNow_Urgency]" out_Str_Result="[str_Result]" out_int_StatusCode="[int_StatusCode]" out_str_IncidentNumber="[str_IncidentNumber]">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </o:CreateIncident>
+          <ui:LogMessage DisplayName="Log Message - INC Status Code" sap:VirtualizedContainerService.HintSize="496,144.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;Create Incident status code: &quot; + int_StatusCode.ToString]" />
+          <If Condition="[not in_str_SuccessStatusCodes.Contains(int_StatusCode.ToString)]" DisplayName="Check if Incident Creation was Successful " sap:VirtualizedContainerService.HintSize="496,276" sap2010:WorkflowViewState.IdRef="If_1">
+            <If.Then>
+              <Throw DisplayName="Throw Unable to create ticket in Snow" Exception="[new Exception(String.Format(in_str_ServiceNow_SExceptionMessage, int_StatusCode.ToString, str_Result))]" sap:VirtualizedContainerService.HintSize="334,92" sap2010:WorkflowViewState.IdRef="Throw_2" />
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="548.8,22.4" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="MS Office 365 Send Email to Support" sap:VirtualizedContainerService.HintSize="529.6,2468.8" sap2010:WorkflowViewState.IdRef="Sequence_8">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="x:String" Name="str_MSUsername" />
+                <Variable x:TypeArguments="ss:SecureString" Name="secStr_MSPassword" />
+                <Variable x:TypeArguments="ss:SecureString" Name="secStr_GraphAPIAppId" />
+                <Variable x:TypeArguments="ss:SecureString" Name="secStr_GraphAPIAppTenant" />
+                <Variable x:TypeArguments="x:String" Name="str_GraphAPIAppId" />
+                <Variable x:TypeArguments="x:String" Name="str_GraphAPIAppTenant" />
+                <Variable x:TypeArguments="x:String" Name="str_body">
+                  <Variable.Default>
+                    <Literal x:TypeArguments="x:String" Value="" />
+                  </Variable.Default>
+                </Variable>
+              </Sequence.Variables>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:LogMessage DisplayName="Log Message - Unable to create ticket in service now" sap:VirtualizedContainerService.HintSize="467.2,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;Unable to create Incident Ticket on ServiceNow. | Error Details: &quot; + exception.Message]" />
+              <ui:LogMessage DisplayName="Log Message - Send email to support team" sap:VirtualizedContainerService.HintSize="467.2,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;Send email to support team - Started.&quot;]" />
+              <Sequence DisplayName="Get MS Office Connection Details" sap:VirtualizedContainerService.HintSize="467.2,1174.4" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="[in_str_MailBotCredentialAssetName]" CacheStrategy="None" DisplayName="Get Credential MS Office 365" sap:VirtualizedContainerService.HintSize="337.6,183.2" sap2010:WorkflowViewState.IdRef="GetRobotCredential_2" Password="[secstr_MSPassword]" Username="[str_MSUsername]">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:GetRobotCredential>
+                <Assign DisplayName="Assign - Add @Omers domain" sap:VirtualizedContainerService.HintSize="337.6,60" sap2010:WorkflowViewState.IdRef="Assign_5">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[str_MSUsername]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[if(str_MSUsername.Contains("@omers.com"),str_MSUsername,str_MSUsername + "@omers.com")]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:GetRobotCredential TimeoutMS="{x:Null}" Username="{x:Null}" AssetName="[in_str_GraphAPIApplicationIDAssetName]" CacheStrategy="None" DisplayName="Get Credential_Graph API Application ID" sap:VirtualizedContainerService.HintSize="337.6,183.2" sap2010:WorkflowViewState.IdRef="GetRobotCredential_3" Password="[secStr_GraphAPIAppId]">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:GetRobotCredential>
+                <Assign DisplayName="Assign - str_GraphAPIAppId" sap:VirtualizedContainerService.HintSize="337.6,60" sap2010:WorkflowViewState.IdRef="Assign_3">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[str_GraphAPIAppId]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[new System.Net.NetworkCredential(string.Empty, secStr_GraphAPIAppId).Password]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:GetRobotCredential TimeoutMS="{x:Null}" Username="{x:Null}" AssetName="[in_str_GraphAPITenantAssetName]" CacheStrategy="None" DisplayName="Get Credential_Graph API Tenant" sap:VirtualizedContainerService.HintSize="337.6,183.2" sap2010:WorkflowViewState.IdRef="GetRobotCredential_4" Password="[secStr_GraphAPIAppTenant]">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:GetRobotCredential>
+                <Assign DisplayName="Assign - str_GraphAPIAppTenant" sap:VirtualizedContainerService.HintSize="337.6,60" sap2010:WorkflowViewState.IdRef="Assign_4">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[str_GraphAPIAppTenant]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[new System.Net.NetworkCredential(string.Empty, secStr_GraphAPIAppTenant).Password]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:LogMessage DisplayName="Log Message - Email User" sap:VirtualizedContainerService.HintSize="337.6,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;Email Credentials retrieved for: &quot; + str_MSUsername]" />
+              </Sequence>
+              <ui:MultipleAssign DisplayName="Multiple Assign - format body" sap:VirtualizedContainerService.HintSize="467.2,132" sap2010:WorkflowViewState.IdRef="MultipleAssign_1">
+                <ui:MultipleAssign.AssignOperations>
+                  <scg:List x:TypeArguments="ui:AssignOperation" Capacity="8">
+                    <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_6">
+                      <ui:AssignOperation.To>
+                        <OutArgument x:TypeArguments="x:String">[str_body]</OutArgument>
+                      </ui:AssignOperation.To>
+                      <ui:AssignOperation.Value>
+                        <InArgument x:TypeArguments="x:String">[in_str_SExceptionBody]</InArgument>
+                      </ui:AssignOperation.Value>
+                    </ui:AssignOperation>
+                    <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_4">
+                      <ui:AssignOperation.To>
+                        <OutArgument x:TypeArguments="x:String">[str_body]</OutArgument>
+                      </ui:AssignOperation.To>
+                      <ui:AssignOperation.Value>
+                        <InArgument x:TypeArguments="x:String">[String.Format(str_body, Environment.UserName, exception.Message, in_str_ShortDescription, in_str_Description, in_str_ScreenShotURL)]</InArgument>
+                      </ui:AssignOperation.Value>
+                    </ui:AssignOperation>
+                  </scg:List>
+                </ui:MultipleAssign.AssignOperations>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:MultipleAssign>
+              <uma:Office365ApplicationScope ApplicationSecret="{x:Null}" CertificateAsBase64="{x:Null}" CertificatePassword="{x:Null}" ContinueOnError="{x:Null}" Password="{x:Null}" SecureApplicationSecret="{x:Null}" Timeout="{x:Null}" ApplicationId="[str_GraphAPIAppId]" AuthenticationType="UsernameAndPassword" DisplayName="Microsoft Office 365 Scope_ Send mail to support team" Environment="Global" sap:VirtualizedContainerService.HintSize="467.2,439.2" sap2010:WorkflowViewState.IdRef="Office365ApplicationScope_1" OAuthApplication="UiPath" SecurePassword="[secstr_MSPassword]" Services="Files, Mail, Shared" Tenant="[str_GraphAPIAppTenant]" Username="[str_MSUsername]">
+                <uma:Office365ApplicationScope.Body>
+                  <ActivityAction x:TypeArguments="mg:GraphServiceClient">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="mg:GraphServiceClient" Name="ParentScope" />
+                    </ActivityAction.Argument>
+                    <umam:SendMail AttachmentsCollection="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" From="{x:Null}" ReplyTo="{x:Null}" Account="[in_str_ErrorMailAccount]" Body="[str_body]" DisplayName="Send Mail_Support Team" sap:VirtualizedContainerService.HintSize="433.6,352.8" sap2010:WorkflowViewState.IdRef="SendMail_1" Importance="Normal" IsBodyHTML="True" IsDraft="False" Subject="[in_str_ErrorMailSubject]" To="[in_str_ErrorMailTo.Split(&quot;;&quot;c)]">
+                      <umam:SendMail.Attachments>
+                        <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                      </umam:SendMail.Attachments>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </umam:SendMail>
+                  </ActivityAction>
+                </uma:Office365ApplicationScope.Body>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </uma:Office365ApplicationScope>
+              <ui:LogMessage DisplayName="Log Message - Send email To" sap:VirtualizedContainerService.HintSize="467.2,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="[&quot;Email sent to: &quot; + in_str_ErrorMailTo]" />
+              <ui:LogMessage DisplayName="Log Message - Send email to support team" sap:VirtualizedContainerService.HintSize="467.2,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;Send email to support team - Ended.&quot;]" />
+            </Sequence>
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+    <ui:LogMessage DisplayName="Log Message - Create Incident End" sap:VirtualizedContainerService.HintSize="582.4,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Create Incident - Workflow Ended&quot;]" />
+  </Sequence>
+</Activity>

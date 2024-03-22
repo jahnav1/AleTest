@@ -1,0 +1,23 @@
+﻿trigger:
+  branches:
+    include:
+    - UAT
+stages:
+- stage: __default
+  jobs:
+  - job: Job
+    pool:
+      name: RPA-Orchestrator
+    steps:
+    - task: UiPathPack@4
+      inputs:
+        versionType: 'CurrentVersion'
+        projectJsonPath: '$(Build.SourcesDirectory)'
+        orchestratorConnection: 'UAT Orchestrator Cloud'
+        outputPath: '$(Build.ArtifactStagingDirectory)\Output'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
