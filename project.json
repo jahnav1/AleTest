@@ -4,7 +4,6 @@
   "description": "OMERS library for Miscellaneous tasks ",
   "main": "NewActivity.xaml",
   "dependencies": {
-    "OMERS.NonLegacy.ServiceNowAPI_Activities": "1.0.2",
     "UiPath.Excel.Activities": "2.20.2",
     "UiPath.MicrosoftOffice365.Activities": "1.11.1",
     "UiPath.System.Activities": "23.4.3",
